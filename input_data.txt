@@ -1,0 +1,10 @@
+se=0 	par=Producer_data	Rng=Producer_data!A1:O30	rdim=1	cdim=1
+	par=Exporter_data	Rng=Exporter_data!A1:F30	rdim=1	cdim=1
+	par=Trans_c_data	Rng=Trans_c_data!A1:G60		rdim=2	cdim=1
+	par=Trans_e_data	Rng=Trans_e_data!A1:G60		rdim=2	cdim=1
+	par=seastart		Rng=seastart!A1:AC24		rdim=1	cdim=1
+	par=seadynamic		Rng=seadynamic!A1:AC24		rdim=1	cdim=1
+	par=p_ref		Rng=p_ref!A1:K60		rdim=1	cdim=1
+	par=y_ref		Rng=y_ref!A1:K60		rdim=1	cdim=1
+	par=epsi		Rng=epsi!A1:K60			rdim=1	cdim=1
+

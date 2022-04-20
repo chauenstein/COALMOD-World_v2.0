@@ -1,0 +1,3 @@
+par=report_ECT	rng=Report!a2:h1000000	cdim = 0
+par=flow_ECT	rng=flow!a2 		cdim = 0
+par=timestamp	rng=Run_Overview!c10 	cdim = 0
