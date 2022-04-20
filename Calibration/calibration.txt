@@ -1,0 +1,8 @@
+par=p_c_fix	 	rng=p_c_fix!a2		cdim = 0
+par=consumption		rng=consumption!a2	cdim = 0
+par=p_ref	 	rng=p_ref! 		cdim = 1
+par=y_ref	 	rng=y_ref!		cdim = 1
+par=timestamp 		rng=Run_Overview!c10 	cdim = 0
+
+
+ 
