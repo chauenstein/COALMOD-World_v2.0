@@ -68,7 +68,7 @@ Pmaxinv(f) = Producer_data(f,'Pmaxinv');
 mc_int_start(f,a) = Producer_data(f,'mc_int_start');
 mc_slp_start(f) = Producer_data(f,'mc_slp_start');
 mc_int_var(f) = Producer_data(f,'mc_int_var');
-mc_slp_var(f) = Producer_data(f,'mc_slp_var');
+*mc_slp_var(f) = Producer_data(f,'mc_slp_var');
 *CournotPower=0 means no market power. CournotPower=1 means market power.
 CournotPowerP(a,f,c)=0;
 
