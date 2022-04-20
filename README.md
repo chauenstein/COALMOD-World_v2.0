@@ -1,9 +1,8 @@
-# COALMOD-World_v2-0
-This repository contains all files necessary to run COALMOD-World 2.0.
-COALMOD-World 1.0 can be found here: https://www.diw.de/de/diw_01.c.599753.de/modelle.html#c_599799
+# COALMOD-World 2.0
+This repository contains all files necessary to run COALMOD-World 2.0 (CMW2.0). CMW2.0 is based on [Holz et al. (2016)](https://www.diw.de/documents/publikationen/73/diw_01.c.546364.de/diw_datadoc_2016-085.pdf). The changes compared to [COALMOD-World Version 1.0] (https://www.diw.de/de/diw_01.c.599753.de/modelle.html#c_599799) are introduced in [Hauenstein (2022)]().
 
 
-##How to run COALMOD-World 2.0
+## How to run COALMOD-World 2.0
 
 ### Install GAMS
 
@@ -39,4 +38,5 @@ The result files are placed in the model folder under:
 ### Scenario data
 
 This repository contains exemplary the input data file for the "High_demand" scenario.
+
 Further scenario data is published here: https://zenodo.org/communities/coalmod-world
