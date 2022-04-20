@@ -1,5 +1,5 @@
 # COALMOD-World 2.0
-This repository contains all files necessary to run COALMOD-World 2.0 (CMW2.0). CMW2.0 is based on [Holz et al. (2016)](https://www.diw.de/documents/publikationen/73/diw_01.c.546364.de/diw_datadoc_2016-085.pdf). The changes compared to [COALMOD-World Version 1.0] (https://www.diw.de/de/diw_01.c.599753.de/modelle.html#c_599799) are introduced in [Hauenstein (2022)]().
+This repository contains all files necessary to run COALMOD-World 2.0 (CMW2.0). CMW2.0 is based on [Holz et al. (2016)](https://www.diw.de/documents/publikationen/73/diw_01.c.546364.de/diw_datadoc_2016-085.pdf). The changes compared to [COALMOD-World Version 1.0](https://www.diw.de/de/diw_01.c.599753.de/modelle.html#c_599799) are introduced in [Hauenstein (pre-print)]().
 
 
 ## How to run COALMOD-World 2.0
