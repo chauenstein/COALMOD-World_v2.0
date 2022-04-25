@@ -61,7 +61,9 @@ report(%modrun%,'Production','MC at PCap','USD/t',country,f,a) = mc_int(a,f) + m
 report(%modrun%,'Production','MC_int','USD/t',country,f,a) = mc_int(a,f);
 
 report(%modrun%,'Production','MC at PLev','USD/t',country,f,a) = mc_int(a,f) + mc_slp_start(f) * (sum(c,kfs(f)*x.l(a,f,c)) + sum(e,kfs(f)*y.l(a,f,e))) ;
-
+*** include Pinv
+report(%modrun%,'Production','Pinv','mnUSD',country,f,a)  = Pinv.l(a,f)*CPinv(f);
+report(%modrun%,'Production','Pinv','Mass',country,f,a)  = Pinv.l(a,f);
 
 ** Production Surplus **
 
@@ -76,6 +78,11 @@ report(%modrun%,'Production','alpha_Pinv','XX',country,f,a) = alpha_Pinv.l(a,f);
 
 ** shadow price (dual) of reserve constraint  **
 report(%modrun%,'Production','alpha_res','XX',country,f,'cum') = alpha_res.l(f);
+
+*** investments in transport infrastructre
+report(%modrun%,'Production','Tinv_c','mnUSD',country,f,a)  =  sum(c, Tinv_c.l(a,f,c)*CTinv_c(f,c)*DomProd(f,c));
+
+report(%modrun%,'Production','Tinv_e','mnUSD',country,f,a)  =  sum(e, Tinv_e.l(a,f,e)*CTinv_e(f,e)*ExProd(f,e));
 
 };
 
@@ -97,6 +104,11 @@ report(%modrun%,'Consumption','out','Mass',country,c,a)   = sum(f,x.l(a,f,c)*kfs
 report(%modrun%,'Price','PriceC','USD/GJ',country,c,a)    = p_c.l(a,c);
 report(%modrun%,'Price','DemInter','USD/GJ',country,c,a)  = p_ref(c,a)*(1-1/epsi(c,a));
 };
+
+***average consumers' price
+report(%modrun%,'Price','Avg_Price','USD/GJ','all','all',a)   = sum((country,c),report(%modrun%,'Price','PriceC','USD/GJ',country,c,a)*(sum(e,zz(e,c,a))+ sum(f,x.l(a,f,c))))
+                                                                 /(sum((c,e),zz(e,c,a))+ sum((c,f),x.l(a,f,c)));
+
 
 loop{(country,sea)$Conscountry(sea,country),
 report(%modrun%,'Consumption','CSur','mnUSD',country,sea,a)  = 0.5*(sum(e,(DemInter(a,sea)-p_c.l(a,sea))*z.l(a,e,sea) ));
@@ -124,14 +136,20 @@ report(%modrun%,'Price','PriceE','USD/GJ',country,e,a)   = p_e.l(a,e);
 report(%modrun%,'Price','PriceE','USD/t',country,e,a)    = p_e.l(a,e)/kes(e);
 report(%modrun%,'Exports','ECap','Mass',country,e,a)     = Ecap(e) + sum(aa$(ORD(aa) < ORD(a)), Einv.l(aa,e));
 report(%modrun%,'Exports','EInv','mnUSD',country,e,'cum')  = sum(a$(ORD(a)<5), Einv.l(a,e)*CEinv(e));
+***annual EInv
+report(%modrun%,'Exports','EInv','mnUSD',country,e,a)  =  Einv.l(a,e)*CEinv(e);
 
 report(%modrun%,'Exports','ESur','mnUSD',country,e,a)      = sum(sea,p_c.l(a,sea)*z.l(a,e,sea)) - ( sum(sea,p_e.l(a,e)*z.l(a,e,sea) + kes(e)* searate(a,e,sea)*z.l(a,e,sea)
                                                          + kes(e)*fee_port(e)*z.l(a,e,sea)) + CEinv(e)/plength*Einv.l(a,e));
 
 ** shadow price (dual) of exporters capacity for new investments  **
-report(%modrun%,'Production','mu_Einv','XX',country,e,a) = mu_Einv.l(a,e);
+***changed from 'Production' to 'Exports'
+*report(%modrun%,'Production','mu_Einv','XX',country,e,a) = mu_Einv.l(a,e);
+report(%modrun%,'Exports','mu_Einv','XX',country,e,a) = mu_Einv.l(a,e);
 
 };
+
+
 
 report(%modrun%,'Exports','ESur','mnUSD',country,e,'cum') = sum(a$(1 < ORD(a)),((1/(1 + r_e(e)))**(year(a)-2015)*report(%modrun%,'Exports','ESur','mnUSD',country,e,a)
                                                         + (1/(1 + r_e(e)))**(year(a-1)-2015)*report(%modrun%,'Exports','ESur','mnUSD',country,e,a-1))*plength/2 );
@@ -237,11 +255,10 @@ flow(%modrun%,'Trade','alpha_tc','XX',country,f,country2,c,a)= alpha_tc.l(a,f,c)
 
 };
 
-*including these?:
+
 loop{(country,f,country2,e)$(Prodcountry(f,country) AND Expcountry(e,country2)),
 flow(%modrun%,'Trade','Land','Energy',country,f,country2,e,a)= y.l(a,f,e);
 flow(%modrun%,'Trade','Land','Mass',country,f,country2,e,a)= y.l(a,f,e)*kfs(f);
-*** include dual of export constraint of producer f to exporter e (ch_19-09-2018)
 flow(%modrun%,'Trade','alpha_te','XX',country,f,country2,e,a)= alpha_te.l(a,f,e);
 };
 
@@ -278,97 +295,6 @@ report(%modrun%,'Trade','seaborne','Mtpa','World',country,a) = sum((e,sea)$((NOT
 report(%modrun%,'Trade','seaborne','Mtpa','RoW','RoW',a)         = sum((e,sea),z.l(a,e,sea)*kes(e))
                                                                    -report(%modrun%,'Trade','seaborne','Mtpa','World','IND',a)
                                                                    -report(%modrun%,'Trade','seaborne','Mtpa','World','CHN',a);
-
-*** Investment ECT Output
-report_ECT(%modrun%,'Exports','EInv','mnUSD',country,e,a)  =  Einv.l(a,e)*CEinv(e)* Expcountry(e,country);
-
-report_ECT(%modrun%,'Production','Pinv','mnUSD',country,f,a)  = Pinv.l(a,f)*CPinv(f)*Prodcountry(f,country);
-
-report_ECT(%modrun%,'Production','Pinv','Mtpa',country,f,a)  = Pinv.l(a,f)*Prodcountry(f,country);
-
-report_ECT(%modrun%,'Production','Tinv_c','mnUSD',country,f,a)  =  sum(c, Tinv_c.l(a,f,c)*CTinv_c(f,c)*DomProd(f,c))*Prodcountry(f,country);
-
-report_ECT(%modrun%,'Production','Tinv_e','mnUSD',country,f,a)  =  sum(e, Tinv_e.l(a,f,e)*CTinv_e(f,e)*ExProd(f,e))*Prodcountry(f,country);
-
-
-********************************************************************************
-********** ECT report renaming                                       ***********
-********************************************************************************
-
-
-loop{(country,f)$prodcountry(f,country),
-
-report_ECT(%modrun%,'Production','out','PJ',country,f,a) = report(%modrun%,'Production','out','Energy',country,f,a);
-report_ECT(%modrun%,'Production','out','Mtpa',country,f,a) = report(%modrun%,'Production','out','Mass',country,f,a);
-report_ECT(%modrun%,'Production','out','Mtpa',country,f,'cum') = report(%modrun%,'Production','out','Mass',country,f,'cum');
-report_ECT(%modrun%,'Production','alpha_Pinv','XX',country,f,a) = report(%modrun%,'Production','alpha_Pinv','XX',country,f,a);
-report_ECT(%modrun%,'Production','alpha_res','XX',country,f,'cum') = report(%modrun%,'Production','alpha_res','XX',country,f,'cum');
-
-};
-
-loop{ (country,e)$Expcountry(e,country),
-report_ECT(%modrun%,'Production','mu_Einv','XX',country,e,a) = report(%modrun%,'Production','mu_Einv','XX',country,e,a);
-};
-
-loop{(country,f,country2,c)$(Prodcountry(f,country) AND Conscountry(c,country2)),
-flow_ECT(%modrun%,'Trade','Land','PJ',country,f,country2,c,a)= flow(%modrun%,'Trade','Land','Energy',country,f,country2,c,a);
-flow_ECT(%modrun%,'Trade','Land','Mtpa',country,f,country2,c,a)= flow(%modrun%,'Trade','Land','Mass',country,f,country2,c,a);
-flow_ECT(%modrun%,'Trade','alpha_tc','XX',country,f,country2,c,a) = flow(%modrun%,'Trade','alpha_tc','XX',country,f,country2,c,a);
-};
-
-loop{(country,f,country2,e)$(Prodcountry(f,country) AND Expcountry(e,country2)),
-flow_ECT(%modrun%,'Trade','Land','PJ',country,f,country2,e,a)= flow(%modrun%,'Trade','Land','Energy',country,f,country2,e,a);
-flow_ECT(%modrun%,'Trade','Land','Mtpa',country,f,country2,e,a)= flow(%modrun%,'Trade','Land','Mass',country,f,country2,e,a);
-flow_ECT(%modrun%,'Trade','alpha_te','XX',country,f,country2,e,a) = flow(%modrun%,'Trade','alpha_te','XX',country,f,country2,e,a);
-};
-
-loop{(country,e,country2,sea)$(Expcountry(e,country) AND Conscountry(sea,country2)),
-flow_ECT(%modrun%,'Trade','Sea','PJ',country,e,country2,sea,a)= flow(%modrun%,'Trade','Sea','Energy',country,e,country2,sea,a);
-flow_ECT(%modrun%,'Trade','Sea','Mtpa',country,e,country2,sea,a)= flow(%modrun%,'Trade','Sea','Mass',country,e,country2,sea,a);
-};
-
-loop{(country,f,country2,c)$(Prodcountry(f,country) And Conscountry(c,country2)),
-flow_ECT(%modrun%,'Trade','TotalDom','PJ',country,f,country2,c,a)= flow(%modrun%,'Trade','TotalDom','Energy',country,f,country2,c,a);
-flow_ECT(%modrun%,'Trade','TotalDom','Mtpa',country,f,country2,c,a)= flow(%modrun%,'Trade','TotalDom','Mass',country,f,country2,c,a);
-};
-
-loop{(country,f,country2,c)$(Prodcountry(f,country) And Conscountry(c,country2)),
-flow_ECT(%modrun%,'Trade','TotalExp','PJ',country,f,country2,c,a)= flow(%modrun%,'Trade','TotalExp','Energy',country,f,country2,c,a);
-flow_ECT(%modrun%,'Trade','TotalExp','Mtpa',country,f,country2,c,a)= flow(%modrun%,'Trade','TotalExp','Mass',country,f,country2,c,a);
-};
-
-
-flow_ECT(%modrun%,'Trade','Total','PJ',country,f,country2,c,a) = flow(%modrun%,'Trade','Total','Energy',country,f,country2,c,a);
-flow_ECT(%modrun%,'Trade','Total','Mtpa',country,f,country2,c,a) = flow(%modrun%,'Trade','Total','Mass',country,f,country2,c,a);
-
-
-loop{(country,c)$Conscountry(c,country),
-
-report_ECT(%modrun%,'Consumption','out','PJ',country,c,a) = report(%modrun%,'Consumption','out','Energy',country,c,a)  ;
-report_ECT(%modrun%,'Consumption','out','Mtpa',country,c,a)  = report(%modrun%,'Consumption','out','Mass',country,c,a);
-
-report_ECT(%modrun%,'Price','PriceC','USD/GJ',country,c,a)    = report(%modrun%,'Price','PriceC','USD/GJ',country,c,a);
-report_ECT(%modrun%,'Price','PriceQ','USD/t',country,c,a)     = report(%modrun%,'Price','PriceQ','USD/t',country,c,a);
-report_ECT(%modrun%,'Price','DemInter','USD/GJ',country,c,a)  = report(%modrun%,'Price','DemInter','USD/GJ',country,c,a);
-};
-
-report_ECT(%modrun%,'Price','Avg_Price','USD/GJ','all','all',a)   = sum((country,c),report(%modrun%,'Price','PriceC','USD/GJ',country,c,a)*(sum(e,zz(e,c,a))+ sum(f,x.l(a,f,c))))
-                                                                 /(sum((c,e),zz(e,c,a))+ sum((c,f),x.l(a,f,c)));
-
-report_ECT(%modrun%,'Price','Avg_Price','USD/GJ','India','India',a)      = sum(c$Conscountry(c,'IND'),report(%modrun%,'Price','PriceC','USD/GJ','IND',c,a)*(sum(e,zz(e,c,a))+ sum(f,x.l(a,f,c))))
-                                                                         /(sum((c,e)$Conscountry(c,'IND'),zz(e,c,a))+ sum((c,f)$Conscountry(c,'IND'),x.l(a,f,c)));
-
-report_ECT(%modrun%,'Price','Avg_Price','USD/GJ','India_Import','India_Import',a)     = (report(%modrun%,'Price','PriceC','USD/GJ','IND','C_IND_West',a)*(sum(e,zz(e,'C_IND_West',a))+ sum(f,x.l(a,f,'C_IND_West')))
-                                                                                         +report(%modrun%,'Price','PriceC','USD/GJ','IND','C_IND_South',a)*(sum(e,zz(e,'C_IND_South',a))+ sum(f,x.l(a,f,'C_IND_South'))))
-                                                                                         /(sum(e,zz(e,'C_IND_West',a))+ sum(f,x.l(a,f,'C_IND_West'))+(sum(e,zz(e,'C_IND_South',a))+ sum(f,x.l(a,f,'C_IND_South'))));
-
-report_ECT(%modrun%,'Price','Avg_Price','USD/GJ','India','India',a)      = sum(c$Conscountry(c,'IND'),report(%modrun%,'Price','PriceC','USD/GJ','IND',c,a)*(sum(e,zz(e,c,a))+ sum(f,x.l(a,f,c))))
-                                                                         /(sum((c,e)$Conscountry(c,'IND'),zz(e,c,a))+ sum((c,f)$Conscountry(c,'IND'),x.l(a,f,c)));
-
-report_ECT(%modrun%,'Price','Avg_Price','USD/GJ','RoW','RoW',a)  = sum((country,c)$(NOT Conscountry(c,'IND')),report(%modrun%,'Price','PriceC','USD/GJ',country,c,a)*(sum(e,zz(e,c,a))+ sum(f,x.l(a,f,c))))
-                                                                 /(sum((c,e)$(NOT Conscountry(c,'IND')),zz(e,c,a))+ sum((c,f)$(NOT Conscountry(c,'IND')),x.l(a,f,c)));
-
-
 
 
 
