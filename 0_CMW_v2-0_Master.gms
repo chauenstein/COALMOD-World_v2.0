@@ -75,7 +75,7 @@ $Include 4_CMW_v2-0_Scenario.gms
 *************** Generate Output ************************************************
 ********************************************************************************
 $include 7-2_CMW_v2-0_Generate_Excel_Output.gms
-$include 7-3_CMW_v2-0_Generate_ECT_Output.gms
+
 
 $endif.purpose
 
