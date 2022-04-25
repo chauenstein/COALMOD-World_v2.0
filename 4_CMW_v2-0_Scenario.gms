@@ -45,7 +45,7 @@ DemInter(a,c) =  p_ref(c,a)*(1-1/epsi(c,a));
 
 if (stepM.val=3,
 
-execute "gdxxrw.exe Input_Data/Input_data_v2-0_BY2015_15C.xlsx UpdLinks =3 o=input_data.gdx  @Input_data.txt"
+execute "gdxxrw.exe Input_Data/Input_data_v2-0_BY2015_1-5degC.xlsx UpdLinks =3 o=input_data.gdx  @Input_data.txt"
 
 execute_load   "input_data.gdx"   p_ref, y_ref, epsi     ;
 
