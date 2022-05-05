@@ -54,6 +54,10 @@ report(%modrun%,'Production','out','Energy',country,f,a) = sum(c,x.l(a,f,c))+ su
 report(%modrun%,'Production','out','Mass',country,f,a) = (sum(c,x.l(a,f,c))+ sum(e,y.l(a,f,e)))*kfs(f);
 report(%modrun%,'Production','out','Mass',country,f,'cum')= sum(a$(1<ORD(a)),((sum(c,x.l(a,f,c))+ sum(e,y.l(a,f,e)))*kfs(f)
                                                                    +(sum(c,x.l(a-1,f,c))+ sum(e,y.l(a-1,f,e)))*kfs(f))*plength/2);
+*cumulative production 2020-2049
+report(%modrun%,'Production','out','Mass',country,f,'cum_2020-2049')= sum(a$(2<ORD(a) AND ORD(a)<9),((sum(c,x.l(a,f,c))+ sum(e,y.l(a,f,e)))*kfs(f)
+                                                                   +(sum(c,x.l(a-1,f,c))+ sum(e,y.l(a-1,f,e)))*kfs(f))*plength/2);
+
 report(%modrun%,'Production','PCap','Mass',country,f,a) = 1/(1+depe(f)**(-(ord(a)-(mlexist(f)/5+1))))*PCap(f)
                                                          + sum(aa$(ORD(aa) < ORD(a)), Pinv.l(aa,f)*1/(1+depn(f)**(-(ord(a)-(mlnew(f)/5+1)-ord(aa)))) );
 report(%modrun%,'Production','MC at PCap','USD/t',country,f,a) = mc_int(a,f) + mc_slp_start(f) * report(%modrun%,'Production','PCap','Mass',country,f,a);
