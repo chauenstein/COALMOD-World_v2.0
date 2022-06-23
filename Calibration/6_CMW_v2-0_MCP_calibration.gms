@@ -4,7 +4,7 @@ Model COALMOD_World_MCP /
          PKKT_Res.alpha_res, PKKT_Tcap_c.alpha_tc, PKKT_Tcap_e.alpha_te,
          DS.p_c, DL.p_c,
          EKKT_z.z, EKKT_Einv.Einv, EKKT_Exp.mu_e, EKKT_Emax.mu_Einv,
-         MCC.p_e, EKKT_China.pi_CHN, EKKT_ChinaIQ.roh_CHN,
+         MCC.p_e, EKKT_China.pi_CHN, EKKT_ChinaIQ.rho_CHN,
 
          /;
 
@@ -27,7 +27,7 @@ mu_Einv_fix(a,e)     =     mu_Einv.l(a,e)      ;
 pi_CHN_fix(a)        =     pi_CHN.l(a)         ;
 p_c_fix(a,c)         =     p_c.l(a,c)          ;
 p_e_fix(a,e)         =     p_e.l(a,e)          ;
-roh_CHN_fix(a)       =     roh_CHN.l(a)        ;
+rho_CHN_fix(a)       =     rho_CHN.l(a)        ;
 
 
 
@@ -39,7 +39,7 @@ execute_unload "Calibration/No_tax_solution.gdx"    x_fix, y_fix, z_fix, Pinv_fi
                                                     Tinv_e_fix, alpha_p_fix, alpha_Pinv_fix,
                                                     alpha_tc_fix, alpha_te_fix, Einv_fix,
                                                     mu_e_fix, mu_Einv_fix, pi_CHN_fix,
-                                                    p_c_fix, p_e_fix, roh_CHN_fix
+                                                    p_c_fix, p_e_fix, rho_CHN_fix
 ;
 
 
