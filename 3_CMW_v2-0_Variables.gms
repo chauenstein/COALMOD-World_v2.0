@@ -19,7 +19,7 @@ Positive variables
          mu_e(a,e)               dual of exporters export capacity
          mu_Einv(a,e)            dual of exporters capacity for new investments
          pi_CHN(a)               dual of Chinas export restriction
-         roh_CHN(a)              dual of Chinas import quota
+         rho_CHN(a)              dual of Chinas import quota
          mu_k_avg(a,e,sea)       dual of quality restriction for imported coal
 ;
 
