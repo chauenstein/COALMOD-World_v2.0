@@ -117,7 +117,7 @@ EKKT_z(a,e,sea)$(NOT fix(a))..    (1/(1 + r_e(e)))**(year(a)-2015) * ( -p_c(a,se
                                   =g= 0;
 
 EKKT_Einv(a,e)$(NOT fix(a))..    (1/(1 + r_e(e)))**(year(a)-2015) *
-                                  CEinv(e)/plength
+                                  CEinv(e)
                                   - sum(aa$(ORD(aa) > ORD(a)), mu_e(aa,e))
                                   + mu_Einv(a,e)
                                   =g= 0 ;
