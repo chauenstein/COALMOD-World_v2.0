@@ -113,7 +113,7 @@ DL(a,land)$(NOT fix(a))..         p_c(a,land) - ( DemInter(a,land) + b(a,land)*(
 EKKT_z(a,e,sea)$(NOT fix(a))..    (1/(1 + r_e(e)))**(year(a)-2015) * ( -p_c(a,sea) -CournotPowerE(a,e,sea)*b(a,sea)*z(a,e,sea)
                                   + p_e(a,e) + kes(e)* searate(a,e,sea) + kes(e)*fee_port(e) +kes(e)*t_i(a,e,sea) )
                                   + kes(e)*mu_e(a,e) + theta(e,sea)*pi_CHN(a)*kes(e)
-                                  + iota(e,sea)*roh_CHN(a)*kes(e)
+                                  + iota(e,sea)*rho_CHN(a)*kes(e)
                                   =g= 0;
 
 EKKT_Einv(a,e)$(NOT fix(a))..    (1/(1 + r_e(e)))**(year(a)-2015) *
