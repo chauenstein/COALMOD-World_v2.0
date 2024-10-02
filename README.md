@@ -4,7 +4,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7077678.svg)](https://doi.org/10.5281/zenodo.7077678)
 
 
-This repository contains all files necessary to run COALMOD-World Version 2.0 (CMW_v2.0). CMW_v2.0 is based on [Holz et al. (2016)](https://www.diw.de/documents/publikationen/73/diw_01.c.546364.de/diw_datadoc_2016-085.pdf). Changes in CMW_v2.0 compared to [COALMOD-World Version 1.0](https://www.diw.de/de/diw_01.c.599753.de/modelle.html#c_599799) are introduced in [Hauenstein (2022)](https://doi.org/10.5281/zenodo.64737329).
+This repository contains all files necessary to run COALMOD-World Version 2.0 (CMW_v2.0). CMW_v2.0 is based on [Holz et al. (2016)](https://www.diw.de/documents/publikationen/73/diw_01.c.546364.de/diw_datadoc_2016-085.pdf). Changes in CMW_v2.0 compared to [COALMOD-World Version 1.0](https://www.diw.de/de/diw_01.c.599753.de/modelle.html#c_599799) are introduced in [Hauenstein (2023)](https://doi.org/10.1088/1748-9326/acb0e5).
 
 
 ## How to run COALMOD-World Version 2.0
